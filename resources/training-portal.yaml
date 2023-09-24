@@ -1,13 +1,20 @@
-apiVersion: training.eduk8s.io/v1alpha1
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: lab-markdown-sample
+  name: learningcenter
 spec:
   portal:
+    ingress:
+      hostname: learningcenter
     registration:
       type: anonymous
+    reserved: 2
+    sessions:
+      maximum: 5
+    updates:
+      workshop: true
   workshops:
   - name: lab-markdown-sample
-    capacity: 1
+    capacity: 2
     expires: 60m
-    orphaned: 5m
+    orphaned: 15m
