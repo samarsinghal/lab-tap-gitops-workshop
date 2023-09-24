@@ -1,0 +1,39 @@
+apiVersion: training.eduk8s.io/v1alpha2
+kind: Workshop
+metadata:
+  name: lab-tap-gitops-workshop
+spec:
+  title: tap gitops setup workshop
+  description: A workshop on setup tap using gitops
+  vendor: eduk8s.io
+  difficulty: beginner
+  duration: 120m
+  url: https://github.com/samarsinghal/lab-tap-gitops-workshop
+  content:
+    image: samarsinghal/k8s-toolset-1.6.2:latest
+    files: github.com/samarsinghal/lab-tap-gitops-workshop
+  session:
+    namespaces:
+      budget: small
+    applications:
+      terminal:
+        enabled: true
+        layout: split
+      console:
+        enabled: true
+      editor:
+        enabled: true
+      docker:
+        enabled: true
+      examiner:
+        enabled: true
+      files:
+        directory: exercises
+        enabled: true
+      registry:
+         enabled: true
+    ingresses:
+    - host: nginx.$(session_namespace).svc.cluster.local
+      name: nginx-via-proxy
+      port: 8080
+      protocol: http

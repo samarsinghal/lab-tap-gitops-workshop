@@ -1,0 +1,41 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+users:
+  - name: ${username}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+
+write_files:
+  - encoding: b64
+    owner: ${username}:${username}
+    content: ${kubeconfig}
+    path: /home/${username}/.kube/config
+    defer: true
+  - encoding: b64
+    content: ${configure_vm_script}
+    path: /usr/local/bin/tap-gitops-workshop-scripts/configure-vm.sh
+    permissions: "0755"
+  - encoding: b64
+    content: ${install_tools_script}
+    path: /usr/local/bin/tap-gitops-workshop-scripts/install-tools.sh
+    permissions: "0755"
+  - encoding: b64
+    content: ${install_tanzu_script}
+    path: /usr/local/bin/tap-gitops-workshop-scripts/install-tanzu.sh
+    permissions: "0755"
+  - encoding: b64
+    content: ${login_gh_script}
+    path: /usr/local/bin/tap-gitops-workshop-scripts/login-gh.sh
+    permissions: "0755"
+  - encoding: b64
+    content: ${tap_version}
+    path: /usr/local/bin/tap-gitops-workshop-scripts/tap-version.yaml
+    permissions: "0755"
+
+runcmd:
+  - su -l ${username} -c '/usr/local/bin/tap-gitops-workshop-scripts/configure-vm.sh "${gh_username}" "${gh_token}" "${tanzu_network_refresh_token}" "${tanzu_registry_username}" "${tanzu_registry_password}"'
